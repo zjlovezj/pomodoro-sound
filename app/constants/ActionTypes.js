@@ -4,3 +4,6 @@ export const EDIT_TODO = 'EDIT_TODO';
 export const COMPLETE_TODO = 'COMPLETE_TODO';
 export const COMPLETE_ALL = 'COMPLETE_ALL';
 export const CLEAR_COMPLETED = 'CLEAR_COMPLETED';
+export const START_POMODORO = 'START_POMODORO';
+export const STOP_POMODORO = 'STOP_POMODORO';
+export const UPDATE_POMODORO = 'UPDATE_POMODORO';

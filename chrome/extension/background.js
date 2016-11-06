@@ -31,3 +31,45 @@ promisifyAll(chrome.storage, [
 require('./background/contextMenus');
 require('./background/inject');
 require('./background/badge');
+
+function updateTime () {
+  chrome.storage.local.get('state', (obj) => {
+    const { state } = obj;
+    if(!!!state) {
+      return
+    }
+    const initialState = JSON.parse(state || '{}');
+// alert(JSON.stringify(initialState))
+    const newState = initialState.pomodoros.map((pomodoro, idx) => {
+      // alert(pomodoro)
+        if(idx === 0) {
+          let e = 25*60 - (new Date().getTime() - pomodoro.startedAt)/1000
+          if(e < 0) {
+            e = 0
+          }
+          // alert(e)
+          return Object.assign({}, pomodoro, { remainingTime: e}) 
+        } else {
+          return pomodoro;
+        }
+    });
+
+    // const pomodoro = initialState[0]
+    // alert(pomodoro)
+    // let e = 25*60 - (new Date().getTime() - pomodoro.startedAt)/1000
+    // if(e < 0) {
+    //   e = 0
+    // }
+    // pomodoro.remainingTime = e
+
+    // const newState = initialState
+    // alert(JSON.stringify(newState))
+
+    
+    chrome.storage.local.set({ state: JSON.stringify({pomodoros: newState}) });
+    // alert(JSON.stringify(newState))
+  });
+}
+
+setInterval(updateTime, 200)
+// setInterval(() => alert(1), 1000)
