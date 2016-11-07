@@ -10,15 +10,8 @@ export default class NewPomodoro extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = { filter: 0, processing: false, };
+    this.state = { filter: 0, processing: false, minutes: 0, seconds: 0,};
   }
-
-  handleClearCompleted = () => {
-    const atLeastOneCompleted = this.props.pomodoros.some(pomodoro => pomodoro.completed);
-    if (atLeastOneCompleted) {
-      this.props.actions.clearCompleted();
-    }
-  };
 
   startOrStopPomodoro = () => {
     if(this.props.pomodoros[0].remainingTime <= 0) {
@@ -30,14 +23,33 @@ export default class NewPomodoro extends Component {
     } 
   };
 
-  // componentWillUnmount() {
-  //   clearInterval(this.timer)
-  // }
+  componentDidMount() {
+    this.timer = setInterval(() => {
+
+      const firstPomodoro = this.props.pomodoros[0];
+      let e = 25*60 - (new Date().getTime() - firstPomodoro.startedAt)/1000
+      if(e < 0) {
+        e = 0
+      }
+      if(firstPomodoro.stopped) {
+        e = 0
+      }
+      //.padStart(2, 0)
+      let minutes = Math.floor(e/60)
+      minutes = minutes >= 10 ? minutes : '0'+minutes
+      let seconds = Math.floor(e%60)
+      seconds = seconds >= 10 ? seconds : '0'+seconds
+
+      this.setState({minutes, seconds});
+    }, 200)
+  }
+  
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
 
   render() {
     const { pomodoros, actions } = this.props;
-
-    const firstPomodoro = pomodoros[0];
 
     let btnText = ''
     if(this.props.pomodoros[0].remainingTime <= 0) {
@@ -46,14 +58,12 @@ export default class NewPomodoro extends Component {
       btnText = 'Stop'
     }
 
-    //.padStart(2, 0)
-    const minutes = Math.floor(firstPomodoro.remainingTime/60)
-    const seconds = Math.floor(firstPomodoro.remainingTime%60)
-
     return (
       <section className={style.main}>
-        <h3>remaining time: {minutes}:{seconds}</h3>
-        <button onClick={this.startOrStopPomodoro}>{btnText}</button>
+        <div style={{display: 'flex', flexDirection: 'row-reverse'}}>
+          <button style={{fontSize: 24, margin: 20, color: 'blue'}} onClick={this.startOrStopPomodoro}>{btnText}</button>
+        </div>
+        <h1>{this.state.minutes}:{this.state.seconds}</h1>
       </section>
     );
   }

@@ -3,6 +3,7 @@ import * as ActionTypes from '../constants/ActionTypes';
 const initialState = [{
   text: 'Init 0',
   completed: false,
+  stopped: false,
   id: 0,
   remainingTime: 0,
   startedAt: 0,
@@ -13,6 +14,7 @@ const actionsMap = {
     return [{
       id: state.reduce((maxId, pomodoro) => Math.max(pomodoro.id, maxId), -1) + 1,
       completed: false,
+      stopped: false,
       text: action.text,
       startedAt: new Date().getTime(),
       remainingTime: 25*60,
@@ -21,7 +23,7 @@ const actionsMap = {
   [ActionTypes.STOP_POMODORO](state, action) {
     return state.map((pomodoro, idx) =>
       (idx === 0 ?
-        Object.assign({}, pomodoro, { remainingTime: 0 }) :
+        Object.assign({}, pomodoro, { stopped: true, remainingTime: 0 }) :
         pomodoro)
     );
   },

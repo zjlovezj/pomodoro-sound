@@ -8,11 +8,11 @@ chrome.storage.local.get('pomodoros', (obj) => {
     }
   } else {
     // Initial
-    chrome.browserAction.setBadgeText({ text: '1' });
+    chrome.browserAction.setBadgeText({ text: '' });
   }
 });
 
-let previousAnnounceTime = 25*60;
+let previousAnnounceTime = 25*60+3; // because we want to announce game begins
 
 function makeSound(pomodoros) {
 
@@ -26,13 +26,14 @@ function makeSound(pomodoros) {
 
   const TOTAL = 25*60
   if(remainingTime > TOTAL - 1 || 
-    // (seconds === 0 ) ||
+    (minutes%5 === 0 && seconds === 0 ) ||
     (minutes === 15 && seconds === 0 ) ||
     (minutes === 5 && seconds === 0 ) ||
     (minutes === 1 && seconds === 0 ) ||
     (minutes === 0 && seconds === 30 ) ||
     (minutes === 0 && seconds === 10 ) ||
-    (minutes === 0 && seconds === 5 )
+    (minutes === 0 && seconds === 5 )  ||
+    (minutes === 0 && seconds === 1 )
   ) {
 
   } else {
@@ -45,9 +46,9 @@ function makeSound(pomodoros) {
   msg.voiceURI = 'native';
   msg.volume = 1; // 0 to 1
   if(minutes > 0) {
-    msg.text = `${minutes} ${minutes > 1 ? 'minutes' : 'minute'} and ${seconds} ${seconds > 1 ? 'seconds' : 'second'}` ;
+    msg.text = `${minutes} ${minutes > 1 ? 'minutes' : 'minute'} and ${seconds} ${seconds > 1 ? 'seconds' : 'second'} left` ;
     if(seconds === 0) {
-      msg.text = `${minutes} ${minutes > 1 ? 'minutes' : 'minute'}` ;
+      msg.text = `${minutes} ${minutes > 1 ? 'minutes' : 'minute'} left` ;
     }
   } else {
     msg.text = `${seconds} ${seconds > 1 ? 'seconds' : 'second'}` ;
@@ -57,7 +58,7 @@ function makeSound(pomodoros) {
     msg.text = 'Game begins!'
   }
   if(remainingTime <= 1 && remainingTime > 0) {
-    msg.text = 'Game over!'
+    msg.text = 'Game over! You are the best!'
   }
 
   if( previousAnnounceTime - remainingTime < 1)
@@ -70,6 +71,7 @@ function makeSound(pomodoros) {
 }
 
 chrome.storage.onChanged.addListener(() => {
+  // alert('in onChanged');
   chrome.storage.local.get('state', (obj) => {
     
     const { state } = obj;
@@ -81,11 +83,11 @@ chrome.storage.onChanged.addListener(() => {
     // alert(pomodoros)
     if (pomodoros) {
       const remainingTime = pomodoros[0].remainingTime;
-      chrome.browserAction.setBadgeText({ text: remainingTime > 0 ? Math.round(remainingTime/60).toString() : '' });
+      chrome.browserAction.setBadgeText({ text: remainingTime > 0 ? Math.ceil(remainingTime/60).toString() : '' });
       makeSound(pomodoros)
     } else {
       // Initial
-      chrome.browserAction.setBadgeText({ text: '1' });
+      chrome.browserAction.setBadgeText({ text: '' });
     }
   });
 })

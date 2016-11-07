@@ -32,7 +32,7 @@ require('./background/contextMenus');
 require('./background/inject');
 require('./background/badge');
 
-function updateTime () {
+function updateTime() {
   chrome.storage.local.get('state', (obj) => {
     const { state } = obj;
     if(!!!state) {
@@ -40,11 +40,20 @@ function updateTime () {
     }
     const initialState = JSON.parse(state || '{}');
 // alert(JSON.stringify(initialState))
+
+    const firstPomodoro = initialState.pomodoros[0]
+    if(firstPomodoro.stopped) {
+      return
+    }
+
     const newState = initialState.pomodoros.map((pomodoro, idx) => {
       // alert(pomodoro)
         if(idx === 0) {
           let e = 25*60 - (new Date().getTime() - pomodoro.startedAt)/1000
           if(e < 0) {
+            e = 0
+          }
+          if(pomodoro.stopped) {
             e = 0
           }
           // alert(e)
