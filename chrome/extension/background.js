@@ -46,7 +46,7 @@ function updateTime() {
       return
     }
 
-    initialState.splice(10, initialState.length - 10) // only save the first 11 pomodoros
+    initialState.pomodoros.splice(10, initialState.pomodoros.length - 10) // only save the first 11 pomodoros
 
     const newState = initialState.pomodoros.map((pomodoro, idx) => {
       // alert(pomodoro)
