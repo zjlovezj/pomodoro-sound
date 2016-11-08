@@ -61,7 +61,7 @@ function makeSound(pomodoros) {
     msg.text = 'Game over! You are the best!'
   }
 
-  if( previousAnnounceTime - remainingTime < 1)
+  if( previousAnnounceTime - remainingTime < 1 && previousAnnounceTime > remainingTime)
     return;
 
   speechSynthesis.speak(msg);
