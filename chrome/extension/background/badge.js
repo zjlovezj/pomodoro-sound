@@ -21,6 +21,11 @@ function makeSound(pomodoros) {
     return
   }
 
+  // dont announce if the previous announcement was a second ago;
+  // pomodoro restarts, previousAnnounceTime can be smaller than current remainingTime, so it should be avoid
+  if( previousAnnounceTime - remainingTime < 1 && previousAnnounceTime > remainingTime)  
+    return;
+
   const minutes = Math.floor(remainingTime/60)
   const seconds = Math.floor(remainingTime%60)
 
@@ -60,9 +65,6 @@ function makeSound(pomodoros) {
   if(remainingTime <= 1 && remainingTime > 0) {
     msg.text = 'Game over! You are the best!'
   }
-
-  if( previousAnnounceTime - remainingTime < 1 && previousAnnounceTime > remainingTime)
-    return;
 
   speechSynthesis.speak(msg);
   previousAnnounceTime = remainingTime

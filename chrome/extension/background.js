@@ -45,6 +45,9 @@ function updateTime() {
     if(firstPomodoro.stopped) {
       return
     }
+    if(25*60 - (new Date().getTime() - firstPomodoro.startedAt)/1000 < 0) {
+      return
+    }
 
     initialState.pomodoros.splice(10, initialState.pomodoros.length - 10) // only save the first 11 pomodoros
 
