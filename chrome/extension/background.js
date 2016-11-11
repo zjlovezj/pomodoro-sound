@@ -45,7 +45,7 @@ function updateTime() {
     if(firstPomodoro.stopped) {
       return
     }
-    if(25*60 - (new Date().getTime() - firstPomodoro.startedAt)/1000 < 0) {
+    if(25*60 - (new Date().getTime() - firstPomodoro.startedAt)/1000 < -5) {
       return
     }
 
