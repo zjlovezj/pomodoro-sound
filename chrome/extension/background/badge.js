@@ -47,8 +47,16 @@ function makeSound(pomodoros) {
 
   var msg = new SpeechSynthesisUtterance();
   var voices = window.speechSynthesis.getVoices();
-  msg.voice = voices[0]; // Note: some voices don't support altering params
-  msg.voiceURI = 'native';
+  var selectedVoice = null
+  for(var v of voices) {
+    // console.log(`: ${v.lang} : ${v.default} : ${v.localService} : ${v.name} : ${v.voiceURI}` )
+    if(v.lang === 'en-US') {
+      selectedVoice = v
+      break
+    }
+  }  
+  msg.voice = selectedVoice; // Note: some voices don't support altering params
+  msg.voiceURI = selectedVoice.voiceURI;
   msg.volume = 1; // 0 to 1
   if(minutes > 0) {
     msg.text = `${minutes} ${minutes > 1 ? 'minutes' : 'minute'} and ${seconds} ${seconds > 1 ? 'seconds' : 'second'} left` ;
