@@ -56,7 +56,9 @@ function makeSound(pomodoros) {
     }
   }  
   msg.voice = selectedVoice; // Note: some voices don't support altering params
-  msg.voiceURI = selectedVoice.voiceURI;
+  // console.log(`msg.voiceURI: ${msg.voiceURI}`); //undefined
+  // console.log(`selectedVoice.voiceURI: ${selectedVoice.voiceURI}`);
+  // msg.voiceURI = selectedVoice.voiceURI;
   msg.volume = 1; // 0 to 1
   if(minutes > 0) {
     msg.text = `${minutes} ${minutes > 1 ? 'minutes' : 'minute'} and ${seconds} ${seconds > 1 ? 'seconds' : 'second'} left` ;

@@ -27,7 +27,7 @@ function popWindow(type) {
 
 chrome.contextMenus.create({
   id: CONTEXT_MENU_ID,
-  title: 'Pomodoro sound',
+  title: 'Tomato',
   contexts: ['all'],
   documentUrlPatterns: [
     'https://github.com/*'

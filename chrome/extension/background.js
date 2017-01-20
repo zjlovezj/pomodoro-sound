@@ -29,7 +29,7 @@ promisifyAll(chrome.storage, [
 ]);
 
 require('./background/contextMenus');
-require('./background/inject');
+// require('./background/inject');
 require('./background/badge');
 
 function updateTime() {
